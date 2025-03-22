@@ -16,10 +16,24 @@ int main(int argc, char **argv)
 {
 	/* process user inputs */
 	int nlines;	/* number of input lines read */
-	int numeric = 0; /* 1 if numeric sort */
+	int numeric, reverse;
+	numeric = reverse = 0; /* 1 if numeric sort */
 	
-	if(argc > 1 && strcmp(argv[1], "-n") == 0)
-		numeric = 1;
+	/* get arguments */
+	while(--argc > 0)
+	{
+		++argv;
+		do
+		{
+			if(**argv == 'n')
+				numeric = 1;
+			else if(**argv == 'r')
+				reverse = 1;
+		} while(*(*argv)++ != '\0');
+
+	}
+
+	/* get lines, sort them and print sorted result */
 	if((nlines = readlines(lineptr, linemem, MEMSIZE, MAXLINES, MAXLINE)) >= 0)
 	{
 		qsort2((void **) lineptr, 0, nlines - 1, (int (*)(void*, void*))(numeric ? numcmp : strcmp));
