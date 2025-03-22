@@ -36,7 +36,7 @@ int main(int argc, char **argv)
 	/* get lines, sort them and print sorted result */
 	if((nlines = readlines(lineptr, linemem, MEMSIZE, MAXLINES, MAXLINE)) >= 0)
 	{
-		qsort2((void **) lineptr, 0, nlines - 1, (int (*)(void*, void*))(numeric ? numcmp : strcmp));
+		qsort2((void **) lineptr, 0, nlines - 1, (int (*)(void*, void*))(numeric ? numcmp : strcmp), reverse);
 		printf("\n\nSorted Lines:\n");
 		writelines(lineptr, nlines);
 		return 0;
