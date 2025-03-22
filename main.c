@@ -16,8 +16,8 @@ int main(int argc, char **argv)
 {
 	/* process user inputs */
 	int nlines;	/* number of input lines read */
-	int numeric, reverse;
-	numeric = reverse = 0; /* 1 if numeric sort */
+	int numeric, reverse, ignore_case;
+	numeric = reverse = ignore_case = 0; /* 1 if true */
 	
 	/* get arguments */
 	while(--argc > 0)
@@ -29,14 +29,32 @@ int main(int argc, char **argv)
 				numeric = 1;
 			else if(**argv == 'r')
 				reverse = 1;
+			else if(**argv == 'f')
+				ignore_case = 1;
 		} while(*(*argv)++ != '\0');
 
+	}
+	
+	/* we can't have both ignore_case and numeric true */
+	if(numeric && ignore_case)
+	{
+		printf("Usage: can't have ignore case and numeric sort.\n");
+		return -1;
 	}
 
 	/* get lines, sort them and print sorted result */
 	if((nlines = readlines(lineptr, linemem, MEMSIZE, MAXLINES, MAXLINE)) >= 0)
 	{
-		qsort2((void **) lineptr, 0, nlines - 1, (int (*)(void*, void*))(numeric ? numcmp : strcmp), reverse);
+		/* find what comparison function we are using */
+		void *func;
+		if(numeric)
+			func = numcmp;
+		else if(ignore_case)
+			func = strcasecmp;
+		else
+			func = strcmp;
+
+		qsort2((void **) lineptr, 0, nlines - 1, (int (*)(void*, void*))(func), reverse);
 		printf("\n\nSorted Lines:\n");
 		writelines(lineptr, nlines);
 		return 0;

@@ -13,7 +13,7 @@ void qsort2(void *v[], int left, int right, int (*comp)(void *, void *), int rev
 	last = left;
 	for(i = left+1; i <= right; i++)
 	{
-		if(reverse = 0)
+		if(reverse == 0)
 		{
 			if((*comp)(v[i], v[left]) < 0)
 				swap(v, ++last, i);
